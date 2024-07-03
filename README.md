@@ -31,7 +31,7 @@ pip install requests
 2. Run the script:
 
 ```bash
-python calendly_contacts_extractor.py
+python contactexport.py
 ```
 
 ## Script Details
