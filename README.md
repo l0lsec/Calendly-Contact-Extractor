@@ -77,5 +77,3 @@ If you have suggestions for improving this script, feel free to create an issue 
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for more details.
-```
-
