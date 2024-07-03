@@ -79,4 +79,3 @@ If you have suggestions for improving this script, feel free to create an issue 
 This project is licensed under the MIT License. See the `LICENSE` file for more details.
 ```
 
-Copy and paste the above content into a `README.md` file in your project directory. This README provides a comprehensive guide on what the script does, how to use it, and what output to expect.
