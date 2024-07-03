@@ -1,7 +1,8 @@
 ```markdown
 # Calendly Contacts Extractor
 
-This Python script extracts all contacts from Calendly by querying the API and handles pagination to ensure all contacts are fetched. The script stores the contacts in a text file and a CSV file, with filenames that include the current date. The script also outputs the number of unique contacts extracted.
+This Python script extracts all contacts from Calendly by querying the API and handles pagination to ensure all contacts are fetched. 
+The script stores the contacts in a text file and a CSV file, with filenames that include the current date. The script also outputs the number of unique contacts extracted.
 
 ## Features
 
