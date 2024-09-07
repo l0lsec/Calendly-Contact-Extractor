@@ -1,4 +1,3 @@
-```markdown
 # Calendly Contacts Extractor
 
 This Python script extracts all contacts from Calendly by querying the API and handles pagination to ensure all contacts are fetched. 
