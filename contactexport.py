@@ -6,7 +6,7 @@ import urllib.parse
 from datetime import datetime
 
 # Calendly session cookie
-calendly_session = "{Enter _calendly_session Cookie}"
+calendly_session = "YOUR_SESSION_COOKIE_HERE"
 
 # Base URL for the API
 base_url = "https://calendly.com/api/dashboard/contacts/?contact%5Bfavorite%5D=false&contact%5Bpage_path%5D="
@@ -25,6 +25,7 @@ def get_contacts(url):
 
 # Initialize a set to store unique contacts
 unique_contacts = set()
+all_fieldnames = set()  # To track all possible fieldnames dynamically
 
 # Start with the base URL
 current_url = base_url
@@ -34,6 +35,7 @@ while current_url:
     contacts_data = get_contacts(current_url)
     for contact in contacts_data.get("contacts", []):
         unique_contacts.add(json.dumps(contact))  # Convert dict to string for uniqueness
+        all_fieldnames.update(contact.keys())  # Dynamically collect all fieldnames
     print(f"Completed fetching page. Total unique contacts so far: {len(unique_contacts)}")
     
     next_page = contacts_data.get("pagination", {}).get("next_page")
@@ -54,6 +56,9 @@ unique_contacts_list = [json.loads(contact) for contact in unique_contacts]
 # Get the current date
 current_date = datetime.now().strftime('%Y-%m-%d')
 
+# Ensure all_fieldnames are sorted for consistent output
+sorted_fieldnames = sorted(all_fieldnames)
+
 # Write contacts to a text file
 text_filename = f'contacts_{current_date}.txt'
 print(f"Writing contacts to {text_filename}")
@@ -64,14 +69,15 @@ print(f"Finished writing to {text_filename}")
 
 # Write contacts to a CSV file
 csv_filename = f'contacts_{current_date}.csv'
-csv_columns = ["uuid", "name", "email", "phone", "time_zone", "favorite", "notes", "visible", "next_event", "last_event"]
 print(f"Writing contacts to {csv_filename}")
 try:
     with open(csv_filename, 'w', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+        writer = csv.DictWriter(csvfile, fieldnames=sorted_fieldnames)
         writer.writeheader()
         for contact in unique_contacts_list:
-            writer.writerow(contact)
+            # Fill missing fields with None
+            sanitized_contact = {field: contact.get(field, None) for field in sorted_fieldnames}
+            writer.writerow(sanitized_contact)
     print(f"Finished writing to {csv_filename}")
 except IOError:
     print("I/O error during writing to CSV file")
