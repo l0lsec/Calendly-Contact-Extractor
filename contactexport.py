@@ -6,7 +6,7 @@ import urllib.parse
 from datetime import datetime
 
 # Calendly session cookie
-calendly_session = "YOUR_SESSION_COOKIE_HERE"
+calendly_session = "_calendly_session_cookie_value"
 
 # Base URL for the API
 base_url = "https://calendly.com/api/dashboard/contacts/?contact%5Bfavorite%5D=false&contact%5Bpage_path%5D="
@@ -50,8 +50,24 @@ while current_url:
 print("Finished fetching contacts.")
 print(f"Total unique contacts fetched: {len(unique_contacts)}")
 
-# Convert the set back to a list of dictionaries
-unique_contacts_list = [json.loads(contact) for contact in unique_contacts]
+# Process contacts before writing
+unique_contacts_list = []
+for contact in unique_contacts:
+    contact_dict = json.loads(contact)  # Convert string back to dictionary
+    
+    # Split 'name' field into 'first_name' and 'last_name'
+    if 'name' in contact_dict and contact_dict['name']:
+        name_parts = contact_dict['name'].split(maxsplit=1)
+        contact_dict['first_name'] = name_parts[0] if len(name_parts) > 0 else ''
+        contact_dict['last_name'] = name_parts[1] if len(name_parts) > 1 else ''
+    else:
+        contact_dict['first_name'] = ''
+        contact_dict['last_name'] = ''
+    
+    unique_contacts_list.append(contact_dict)
+
+# Add 'first_name' and 'last_name' to fieldnames dynamically
+all_fieldnames.update(['first_name', 'last_name'])
 
 # Get the current date
 current_date = datetime.now().strftime('%Y-%m-%d')
